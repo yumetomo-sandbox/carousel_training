@@ -1,0 +1,56 @@
+.fa-step-carousel {
+  position: relative;
+  width: 700px;
+  height: 240px;
+  overflow: hidden;
+  margin: 50px auto 0 auto;
+}
+.btn {
+  position: absolute;
+  width: 50px;
+  height: 200px;
+  background: #555;
+  top: 0;
+  text-align: center;
+  cursor: pointer;
+}
+.fa-step-btn-prev {
+  left: 25px;
+}
+.fa-step-btn-next {
+  right: 25px;
+}
+.fa-step-btn-prev::before {
+  content: "<";
+  color: #fff;
+  line-height: 200px;
+  font-size: 20px;
+}
+.fa-step-btn-next::before {
+  content: ">";
+  color: #fff;
+  line-height: 200px;
+  font-size: 20px;
+}
+.fa-step-carousel-area {
+  position: absolute;
+  width: 500px;
+  height: 200px;
+  left: 100px;
+  overflow: hidden;
+}
+.fa-step-carousel-list {
+  position: absolute;
+  width: 2000px;
+  height: 200px;
+  left: 0;
+}
+.fa-step-carousel-list li {
+  float: left;
+  width: 500px;
+  height: 200px;
+  background: #ddd;
+  text-align: center;
+  line-height: 200px;
+  list-style: none;
+}

@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  padding-bottom: 30px;
+}
+.content {
+  width: 1000px;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+.carousel {
+  position: relative;
+  width: 700px;
+  height: 240px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.btn {
+  position: absolute;
+  width: 50px;
+  height: 200px;
+  background: #555;
+  top: 0;
+  text-align: center;
+  cursor: pointer;
+}
+.btn-prev {
+  left: 25px;
+}
+.btn-next {
+  right: 25px;
+}
+.btn-prev::before {
+  content: "<";
+  color: #fff;
+  line-height: 200px;
+  font-size: 20px;
+}
+.btn-next::before {
+  content: ">";
+  color: #fff;
+  line-height: 200px;
+  font-size: 20px;
+}
+.carousel-area {
+  position: absolute;
+  width: 500px;
+  left: 100px;
+  overflow: hidden;
+}
+.carousel-list {
+  position: relative;
+  margin-left: -500px;
+}
+.carousel-list li {
+  float: left;
+  width: 500px;
+  height: 200px;
+  background: #ddd;
+  text-align: center;
+  line-height: 200px;
+  list-style: none;
+}
+.carousel-nav {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  text-align: center;
+}
+.carousel-nav li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #555;
+  border-radius: 5px;
+  margin-left: 15px;
+  opacity: .7;
+  cursor: pointer;
+}
+.carousel-nav li:first-child {
+  margin-left: 0;
+}
+.carousel-nav li.now-show {
+  background: #d53434;
+}
