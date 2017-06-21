@@ -1,3 +1,7 @@
+// window.jQuery = window.$ = require('jquery');
+// var velocity = require('velocity-animate');
+// require('velocity-animate/velocity.ui');
+
 (function(){
 
   'use strict';
@@ -14,11 +18,13 @@
     var lastDistance = 0;
     var sumMove = 0;
     var moveParam = 0;
+    var nextCount = 0;
+    var prevCount = 0;
 
     var carouselArea = $('.fa-step-carousel-list li');
     var slideContent = $('.fa-step-carousel-list');
 
-    toggleBtnShow();
+    toggleBtnShow(0);
 
     // ">"ボタンがクリックされたらスライドを1つ進める
     $('.fa-step-btn-next').on('click',function(){
@@ -74,8 +80,11 @@
         moveParam = lastDistance - event.pageX;
         lastDistance = event.pageX;
 
-        // マウスが動いた分コンテンツも移動
-        slideContent.css("left",'-='+moveParam);
+        // アニメーション中ならそのまま
+        if(!slideContent.is('.velocity-animating')){
+          // マウスが動いた分コンテンツも移動
+          slideContent.css("left",'-='+moveParam);
+        }
 
         // 総移動量を保存しておく
         sumMove += moveParam;
@@ -92,17 +101,17 @@
     function slideAnimation(){
 
       // アニメーション中か
-      if(!slideContent.is(':animated')){
+      if(!slideContent.is('.velocity-animating')){
+
+        var leftParam = parseInt($('.fa-step-carousel-list').css('left'));
+        var leftParamAfter = leftParam - (500 - sumMove);
+
+        toggleBtnShow(leftParamAfter);
 
         // 左にスライドさせる
-        slideContent.stop().animate({
-          left: '-=' + (500 - sumMove)
-        },{
-          duration: 500,
-          complete: function(){
-            toggleBtnShow();
-          }
-        });
+        slideContent.stop().velocity({
+          left: leftParamAfter
+        },500);
       }
 
     }
@@ -115,17 +124,17 @@
     function slideAnimationReverse(){
 
       // アニメーション中か
-      if(!slideContent.is(':animated')){
+      if(!slideContent.is('.velocity-animating')){
+
+        var leftParam = parseInt($('.fa-step-carousel-list').css('left'));
+        var leftParamAfter = leftParam + (500 + sumMove);
+
+        toggleBtnShow(leftParamAfter);
 
         // 右にスライドさせる
-        slideContent.stop().animate({
-          left: '+=' + (500 + sumMove)
-        },{
-          duration: 500,
-          complete: function(){
-            toggleBtnShow();
-          }
-        });
+        slideContent.stop().velocity({
+          left: leftParamAfter
+        },500);
 
       }
 
@@ -149,25 +158,30 @@
       }
       // 移動量も加速度も一定以下の場合、スライドを元の位置に戻す
       else{
-        slideContent.stop().animate({
-          left: '+='+sumMove
-        },200);
+
+        // アニメーション中ならそのまま
+        if(!slideContent.is('.velocity-animating')){
+
+          slideContent.stop().velocity({
+            left: '+='+sumMove
+          },200);
+
+        }
       }
 
     }
 
     // ボタンの表示・非表示切り替え
-    function toggleBtnShow(){
+    function toggleBtnShow(leftParamAfter){
 
-      // 現在のleft値を取得
-      var leftParam = parseInt($('.fa-step-carousel-list').css('left'));
+      console.log(leftParamAfter);
 
       // leftが0なら先頭が表示されているので、戻るボタンを非表示に
-      if(leftParam === 0){
+      if(leftParamAfter === 0){
         $('.fa-step-btn-prev').css('display','none');
       }
       // leftが-1500なら末尾が表示されているので、次へボタンを非表示に
-      else if(leftParam === -1500){
+      else if(leftParamAfter === -1500){
         $('.fa-step-btn-next').css('display','none');
       }
       // 先頭でも末尾でもない場合はボタンをどちらも表示
