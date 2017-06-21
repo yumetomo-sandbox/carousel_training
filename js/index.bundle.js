@@ -10333,10 +10333,6 @@ return jQuery;
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-// window.jQuery = window.$ = require('jquery');
-// var velocity = require('velocity-animate');
-// require('velocity-animate/velocity.ui');
-
 (function () {
 
   'use strict';
@@ -10353,8 +10349,6 @@ return jQuery;
     var lastDistance = 0;
     var sumMove = 0;
     var moveParam = 0;
-    var nextCount = 0;
-    var prevCount = 0;
 
     var carouselArea = $('.fa-step-carousel-list li');
     var slideContent = $('.fa-step-carousel-list');
@@ -10376,7 +10370,10 @@ return jQuery;
     // スライドエリアがタッチされたら自動スライドを停止し、カーソル位置を取得
     carouselArea.on('touchstart mousedown', function () {
 
-      isTouch = true;
+      // アニメーション中ならそのまま
+      if (!slideContent.is('.velocity-animating')) {
+        isTouch = true;
+      }
     });
 
     // タッチ状態が解除されたら、カーソル移動量と加速度に応じてスライドアニメーション
@@ -10409,11 +10406,8 @@ return jQuery;
         moveParam = lastDistance - event.pageX;
         lastDistance = event.pageX;
 
-        // アニメーション中ならそのまま
-        if (!slideContent.is('.velocity-animating')) {
-          // マウスが動いた分コンテンツも移動
-          slideContent.css("left", '-=' + moveParam);
-        }
+        // マウスが動いた分コンテンツも移動
+        slideContent.css("left", '-=' + moveParam);
 
         // 総移動量を保存しておく
         sumMove += moveParam;
@@ -10422,8 +10416,6 @@ return jQuery;
 
     /**
      * スライドを1つ次に進める
-     *
-     * @param {number} sumMove
      */
     function slideAnimation() {
 
@@ -10444,8 +10436,6 @@ return jQuery;
 
     /**
      * スライドを1つ前に戻す
-     *
-     * @param {number} sumMove
      */
     function slideAnimationReverse() {
 
@@ -10473,11 +10463,11 @@ return jQuery;
       var nextBtnParam = $('.fa-step-btn-next').css('display');
 
       // 左方向へのカーソル移動量100px以上、もしくは加速度20以上の場合
-      if ((moveParam >= 20 || sumMove > 100) && nextBtnParam == "block") {
+      if ((moveParam >= 20 || sumMove > 100) && nextBtnParam === "block") {
         slideAnimation();
       }
       // 右方向へのカーソル移動量100px以上、もしくは加速度20以上の場合
-      else if ((moveParam <= -20 || sumMove < -100) && prevBtnParam == "block") {
+      else if ((moveParam <= -20 || sumMove < -100) && prevBtnParam === "block") {
           slideAnimationReverse();
         }
         // 移動量も加速度も一定以下の場合、スライドを元の位置に戻す
@@ -10495,8 +10485,6 @@ return jQuery;
 
     // ボタンの表示・非表示切り替え
     function toggleBtnShow(leftParamAfter) {
-
-      console.log(leftParamAfter);
 
       // leftが0なら先頭が表示されているので、戻るボタンを非表示に
       if (leftParamAfter === 0) {
